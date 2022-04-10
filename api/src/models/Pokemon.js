@@ -8,5 +8,30 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    ID: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV1,
+      primaryKey: true,
+      allowNull: false
+    },
+    Health:{
+      type: DataTypes.FLOAT
+    },
+    strength:{
+      type: DataTypes.FLOAT
+    },
+    defending:{
+      type: DataTypes.FLOAT
+    },
+    velocity:{
+      type: DataTypes.FLOAT
+    },
+    
+    height:{
+      type: DataTypes.FLOAT
+    },
+    weight:{
+      type: DataTypes.FLOAT
+    }
   });
 };
