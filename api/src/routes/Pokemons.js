@@ -5,17 +5,32 @@ const { Pokemon } = require('../db.js');
 
 app.get(`/:idPokemon`,function (req, res){
     let id = req.params.idPokemon;
-    console.log(id);    
+    let pokemon ={}   
     axios({
         method: 'GET',
         url: `https://pokeapi.co/api/v2/pokemon/${id}`
-    }).then(data =>res.json(data.data.name))
+    }).then(data =>res.json(pokemon = {name:data.data.name,
+         img:`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`
+       }))
       .catch(err =>res.json(err.message))
     
 })
-app.get('/', function (req, res){
+async function getPokemon(id){
+    let pokemon ={}   
+    await axios({
+        method: 'GET',
+        url: `https://pokeapi.co/api/v2/pokemon/${id}`
+    }).then(data =>pokemon = {name:data.data.name,
+          id:data.data.id,
+         img:`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`
+       })
+      .catch(err => console.log('el error:'+err))
+      return pokemon
+}
+app.get('/', async function (req, res){
     console.log(1)
     const pokemones = []
+    
     if(req.query.name){
         let name = req.query.name
         if (typeof name == 'string'){
@@ -26,12 +41,13 @@ app.get('/', function (req, res){
               .catch(err =>res.json('error pokemon no encontrado'))
             }
             else res.send('name is not a string')
-    }else {
-    axios({
-        method: 'GET',
-        url: 'https://pokeapi.co/api/v2/pokemon'
-    }).then(data =>data.data.results.map(r => {pokemones.push(r.name)})).then(()=> res.json(pokemones
-        ))}
+    }else { for (let i = 1; i < 41; i++) {
+            let aux = await getPokemon(i)
+            console.log(aux)
+            pokemones.push(aux)
+        
+        }
+    } res.json(pokemones)
     
 })
 app.post('/',function (req, res){
@@ -50,3 +66,4 @@ return Pokemon.create(obj)}else res.send('Faltan valores obligatorios')
 
 
 module.exports = app;
+
