@@ -1,5 +1,6 @@
 import React from "react";
 import './cards.css';
+import {Link} from 'react-router-dom';
 // import {getallpokemons} from '../actions/actions'
 // import {useDispatch, useSelector} from 'react-redux'
 
@@ -15,11 +16,15 @@ function Cards ({pokemons}){
           return(<div className="container">
     {pokemons && 
     pokemons.map(r=>{ 
+      
       return (
         <div className='card'> 
         <img src={r.img} width="80" height="80" alt=""/>
+        <Link to={`/pokemons/${r.id} `}>
         <p>{r.name}</p>
+        </Link>
         <p>{r.id}</p>
+        <p>{r.type}</p>
         </div>
      )
 

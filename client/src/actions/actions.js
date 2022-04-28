@@ -14,7 +14,7 @@ export const getallpokemons = function(){
 }
 export const getpokemon = function(id){
     return function (dispatch) {
-        return axios(`http://localhost:300/Pokemons/${id}`)
+        return axios(`http://localhost:3001/Pokemons/${id}`)
         .then (resp=> dispatch({type: GET_POKEMON, payload: resp.data})).then(() => console.log('hola'))
         .catch(err=> console.log(err))
     }

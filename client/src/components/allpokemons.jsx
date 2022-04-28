@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import Cargando from './cargando'
 import Cards from './cards'
 import './allpokemons.css'
+import Search from './search'
 
 function Allpokemons(){
     const dispatch = useDispatch()
@@ -17,15 +18,15 @@ function Allpokemons(){
       useEffect(() =>{
           dispatch(getallpokemons())
          
-        },[dispatch])
+        },[dispatch,setitems,setcurrent])
 
 
-          const prev=()=>{
+          const prev=async()=>{
             const prev = current -1;
             if (prev<0) return
             const first=prev * items_pagina
             setitems([...pokemons].splice(first, items_pagina))
-           setcurrent(prev)
+            setcurrent(prev)
 
             console.log('prev')
           }
@@ -48,8 +49,10 @@ function Allpokemons(){
         )}    
      else if (items.length){return(
        <div className='container'>
+         
          <button onClick={prev} >prev</button>
          <button onClick={next}>next</button>
+         <Search/>
          <Cards pokemons={items}  ></Cards>
        </div>
      )}
@@ -57,6 +60,7 @@ function Allpokemons(){
       <div className='container'>
         <button onClick={prev} >prev</button>
         <button onClick={next}>next</button>
+        <Search/>
         <Cards pokemons={[...pokemons].splice(0, items_pagina)}  ></Cards>
       </div>
     )}

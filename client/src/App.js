@@ -9,6 +9,7 @@ import Allpokemons from './components/allpokemons';
 import Pokemon from './components/pokemon';
 
 
+
 function App() {
   return (
     <div className="App">
@@ -16,7 +17,7 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path='/pokemons' element={<Allpokemons />} />
-      <Route path='/pokemons/{id}' element={<Pokemon />} />
+      <Route path='/pokemons/:id' element={<Pokemon />} />
     </Routes>
   </BrowserRouter>
     </div>
