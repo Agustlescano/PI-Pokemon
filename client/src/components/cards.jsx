@@ -15,7 +15,18 @@ function Cards ({pokemons}){
   
           return(<div className="container">
     {pokemons && 
-    pokemons.map(r=>{ 
+    pokemons.map(r=>{ if(typeof r.id!== 'number'){
+      return (
+        <div className='card'> 
+        <img src={r.img} width="80" height="80" alt=""/>
+        <Link to={`/pokemons/${r.id} `}>
+        <p>{r.name}</p>
+        </Link>
+        <p>{r.id}</p>
+        <p>{r.types[0].name}</p>
+        </div>
+     )
+    }
       
       return (
         <div className='card'> 

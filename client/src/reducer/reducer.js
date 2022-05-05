@@ -14,7 +14,9 @@ function reducer (state=inicialState,{type,payload}) {
          case 'GET_POKEMON':{
              return {...state,pokemon:payload}
          }
-
+        case 'GET_TYPE':{
+           return {...state,types:payload}
+        }
          
 
 

@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express.Router();
 const axios = require('axios') 
-const { Pokemon } = require('../db.js');
+const { Pokemon,Types } = require('../db.js');
+
 
 app.get(`/:idPokemon`,function (req, res){
     let id = req.params.idPokemon;
@@ -34,16 +35,32 @@ async function getPokemon(id){
     }).then(data =>pokemon = {name:data.data.name,
           id:data.data.id,
          img:`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`,
-         type:data.data.types[0].type.name
+         type:data.data.types[0].type.name,
+         hp:data.data.stats[0].base_stat,
+         strength:data.data.stats[1].base_stat,
+         defending:data.data.stats[2].base_stat,
+         velocity:data.data.stats[5].base_stat,
+         height:data.data.height,
+         weight:data.data.weight,
        })
       .catch(err => console.log('el error:'+err))
       return pokemon
 }
-app.get('/', async function (req, res){
+let pokemones =[]
+const cargarpokemons=()=>{  
+         Pokemon.findAll({attributes:['name','id','img','Health','strength','defending','velocity','height','weight'],include: [{ model:Types, attributes:['name','id']}]})
+         .then(res=>{
+            for (let i=0; i<res.length; i++) {
+                if(!pokemones.find(e=> e.name===res[i].dataValues.name))
+                pokemones.push(res[i].dataValues)}
+        console.log(pokemones)})
+         
+    }
+    app.get('/', async function (req, res){
     console.log(1)
-    const pokemones = []
     const pokemon={}
-    Pokemon.findAll({attributes:['name','id']})
+    // Pokemon.findAll({attributes:['name','id']})
+    // .then(pokemon => { pokemones = JSON.stringify(types)})
     
     if(req.query.name){
         let name = req.query.name
@@ -65,27 +82,35 @@ app.get('/', async function (req, res){
               .catch(err =>res.json('error pokemon no encontrado'))
             }
             else res.send('name is not a string')
-    }else { for (let i = 1; i < 41; i++) {
+    }else { cargarpokemons()
+         for (let i = 1; i < 41; i++) {
             let aux = await getPokemon(i)
-            console.log(aux)
-            pokemones.push(aux)
+           if(!pokemones.find(e=> e.name===aux.name)){
+
+               pokemones.push(aux)
+           }
         
         }
+        console.log(pokemones)
     } res.json(pokemones)
     
 })
-app.post('/',function (req, res){
-const {name,Health,strength,defending,velocity,height,weight} = req.body;
+app.post('/',async function (req, res){
+const {name,Health,strength,defending,velocity,height,weight,types} = req.body;
+console.log(req.body)
 if(name){
-const obj = {name:name,
+const obj = await Pokemon.create({name:name,
+    img:'https://i0.wp.com/www.alphr.com/wp-content/uploads/2016/07/whos_that_pokemon.png?fit=1920%2C1080&ssl=1',
             Health:Health,
             strength:strength,
             defending:defending,
             velocity:velocity,
             height:height,
             weight:weight
-            }
-return Pokemon.create(obj)}else res.send('Faltan valores obligatorios')
+            })
+obj.setTypes(types) 
+
+}else res.send('Faltan valores obligatorios')
 })
 
 

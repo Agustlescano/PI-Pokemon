@@ -9,11 +9,14 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    ID: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV1,
       primaryKey: true,
       allowNull: false
+    },
+    img:{
+      type: DataTypes.STRING,
     },
     Health:{
       type: DataTypes.FLOAT

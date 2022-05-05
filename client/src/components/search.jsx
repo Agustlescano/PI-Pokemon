@@ -1,11 +1,13 @@
-import {useDispatch, useSelector} from 'react-redux'
-import React, {useEffect,useState} from "react";
+
+import React  from "react";
 
 
 
-function Search (){
-    const dispatch = useDispatch()
-    let pokemons = useSelector(state => state.pokemons)
+function Search ({pokemons}){
+    console.log(pokemons);
+    if(pokemons.length) {pokemons=[]}
+    console.log(pokemons);
+
     return (
         <input     placeholder={'Buscar pokemos...'}  type="text"/>
     )

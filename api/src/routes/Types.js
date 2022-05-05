@@ -2,13 +2,18 @@ const express = require('express');
 const app = express.Router();
 const axios = require('axios') 
 const { Types } = require('../db.js');
-
-app.get('/', function (req, res){
+const tipos =[]
+app.get('/', async function (req, res){
     
-   Types.findAll({attributes:['name','id']})
-   .then(types =>{ const tipos = JSON.stringify(types)
-           res.json(tipos)     
+   await Types.findAll({attributes:['name','id']})
+   .then(res=>{  
+           
+        for (let i=0; i<res.length; i++) {
+                if(!tipos.find(e=>e.name === res[i].dataValues.name)){
+                tipos.push(res[i].dataValues)}}
+                
 })
+res.send(tipos)
 })
 
 
