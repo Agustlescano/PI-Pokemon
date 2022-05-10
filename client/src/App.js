@@ -8,6 +8,7 @@ import HomePage from '../src/components/home';
 import Allpokemons from './components/allpokemons';
 import Pokemon from './components/pokemon';
 import Createpokemons from './components/Createpokemon';
+import Search from './components/search'
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Route path='/pokemons' element={<Allpokemons />} />
       <Route path='/pokemons/:id' element={<Pokemon />} />
       <Route path='/Create/'element={<Createpokemons />} />
+      <Route path='pokemons/search/:name' element={<Search/>} />
     </Routes>
   </BrowserRouter>
     </div>

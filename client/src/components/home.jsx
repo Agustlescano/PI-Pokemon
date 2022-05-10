@@ -4,7 +4,7 @@ function HomePage() {
     return (<div className="home">
            <h1>Bienvenido</h1>
            
-               <Link to='/pokemons'>Ingresar</Link>
+               <Link className="Link"  to='/pokemons'>Ingresar</Link>
                
 
            </div>)

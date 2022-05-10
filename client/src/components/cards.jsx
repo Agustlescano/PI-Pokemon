@@ -9,33 +9,31 @@ import {Link} from 'react-router-dom';
 function Cards ({pokemons}){
      console.log(pokemons.length)
 
-
+     const redirect = (id)=>{
+      window.location = `http://localhost:3000/pokemons/${id.target.value}`;
+     }
 
   
   
           return(<div className="container">
     {pokemons && 
-    pokemons.map(r=>{ if(typeof r.id!== 'number'){
+    pokemons.map(r=>{ if(typeof r.id=== 'string'){
       return (
-        <div className='card'> 
+        <div className='card' key={r.id}> 
         <img src={r.img} width="80" height="80" alt=""/>
-        <Link to={`/pokemons/${r.id} `}>
         <p>{r.name}</p>
-        </Link>
-        <p>{r.id}</p>
         <p>{r.types[0].name}</p>
+        <input type='submit' value={r.id} onClick={redirect} />
         </div>
      )
     }
       
       return (
-        <div className='card'> 
+        <div className='card' key={r.id}> 
         <img src={r.img} width="80" height="80" alt=""/>
-        <Link to={`/pokemons/${r.id} `}>
         <p>{r.name}</p>
-        </Link>
-        <p>{r.id}</p>
         <p>{r.type}</p>
+        <input type='submit' value={r.id} onClick={redirect} />
         </div>
      )
 

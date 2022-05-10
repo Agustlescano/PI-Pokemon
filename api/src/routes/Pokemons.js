@@ -57,19 +57,20 @@ const cargarpokemons=()=>{
          
     }
     app.get('/', async function (req, res){
-    console.log(1)
-    const pokemon={}
+    console.log(req.query)
+    let pokemon ={}
     // Pokemon.findAll({attributes:['name','id']})
     // .then(pokemon => { pokemones = JSON.stringify(types)})
     
     if(req.query.name){
+        console.log('aca entra')
         let name = req.query.name
-        if (typeof name == 'string'){
             axios({
                 method: 'GET',
                 url: `https://pokeapi.co/api/v2/pokemon/${name}`
-            }).then(data =>res.json(pokemon={name:data.data.name,
-                img:`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`,
+            }).then((data) =>{
+                res.json(pokemon={name:data.data.name,
+                img:data.data.sprites.other.dream_world.front_default,
                 id: data.data.id,
                 type:data.data.types[0].type.name,
                 hp:data.data.stats[0].base_stat,
@@ -78,10 +79,8 @@ const cargarpokemons=()=>{
                 velocity:data.data.stats[5].base_stat,
                 height:data.data.height,
                 weight:data.data.weight,}
-                ))
-              .catch(err =>res.json('error pokemon no encontrado'))
-            }
-            else res.send('name is not a string')
+            )})
+             .catch(err =>res.json('error pokemon no encontrado'))      
     }else { cargarpokemons()
          for (let i = 1; i < 41; i++) {
             let aux = await getPokemon(i)
@@ -92,15 +91,15 @@ const cargarpokemons=()=>{
         
         }
         console.log(pokemones)
-    } res.json(pokemones)
+     res.json(pokemones)}
     
 })
 app.post('/',async function (req, res){
-const {name,Health,strength,defending,velocity,height,weight,types} = req.body;
+const {name,Health,strength,defending,velocity,height,weight,img,types} = req.body;
 console.log(req.body)
 if(name){
 const obj = await Pokemon.create({name:name,
-    img:'https://i0.wp.com/www.alphr.com/wp-content/uploads/2016/07/whos_that_pokemon.png?fit=1920%2C1080&ssl=1',
+            img:img,
             Health:Health,
             strength:strength,
             defending:defending,
@@ -108,8 +107,12 @@ const obj = await Pokemon.create({name:name,
             height:height,
             weight:weight
             })
-obj.setTypes(types) 
-
+ types.map(async(t)=>{
+     console.log(t)
+    const tipo= await Types.findAll({where:{name:t}})
+    obj.addTypes(tipo) 
+ })
+res.send('pokemon created')
 }else res.send('Faltan valores obligatorios')
 })
 

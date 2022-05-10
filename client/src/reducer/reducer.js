@@ -1,7 +1,8 @@
 const inicialState = {
     pokemons: [],
     pokemon:{},
-    types: []
+    types: [],
+    search:{}
 }
 
 
@@ -16,6 +17,9 @@ function reducer (state=inicialState,{type,payload}) {
          }
         case 'GET_TYPE':{
            return {...state,types:payload}
+        }
+        case 'GET_SEARCH':{
+            return {...state,search:payload}
         }
          
 
